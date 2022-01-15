@@ -1,29 +1,50 @@
+#pragma once
+
+#ifndef TASK_H
+#define TASK_H
+
 #include <vector>
-#include <thread>
+#include <atomic>
+#include <memory>
+#include <filesystem>
+
+class TaskQueue;
 
 class Task
-{
-public:
+{    
     enum class State
     {
         READY,
-        ACTIVE, //???
+        READY_CHILD,
+        ACTIVE,
         WAIT_CHILD,
         DONE
     };
 
-    State state() const;
+public:
+    Task(const std::filesystem::path& path, TaskQueue& queue);
+
+    int id() const;
     int result() const;
 
+    bool isDone() const;
+
     void process();
-    void processChild();
-    void finishedChild( Task* task );
+    void readyChild();
+
+    void print( int deep = 0 );
 
 private:
-    State m_state;
-    size_t m_result;
+    void finalize();
 
-    std::shred_ptr<Task> m_parent;
-    std::vector< std::shared_ptr<Task> > m_children;
-    std::vector<int> m_completeChildren;
-}
+private:
+    const int m_id;
+    std::atomic< State > m_state;
+    size_t m_result;
+    std::filesystem::path m_path;
+    TaskQueue& m_queue;
+
+    std::vector< std::shared_ptr< Task > > m_children;
+};
+
+#endif
