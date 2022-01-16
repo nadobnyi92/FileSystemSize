@@ -14,7 +14,9 @@ conan_basic_setup()
 set( SRC src/main.cpp
          src/fs_cli.cpp
          src/task.cpp
-         src/task_queue.cpp )
+         src/task_queue.cpp 
+         src/logger.cpp )
 
-add_executable(FileSystemCalculate ${SRC})
+     add_executable(${PROJECT_NAME} ${SRC})
+target_link_libraries(${PROJECT_NAME} p7)
 

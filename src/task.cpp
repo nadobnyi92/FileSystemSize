@@ -1,5 +1,6 @@
 #include "task.h"
 #include "task_queue.h"
+#include "logger.h"
 
 #include <algorithm>
 #include <iostream>
@@ -63,7 +64,9 @@ void Task::process()
         }
         if( m_children.empty() )
         {
-            std::cout << m_path << " size " << m_result << std::endl << "#fs > ";
+            std::stringstream ss;
+            ss << m_path << " size " << m_result;
+            Logger::instance().log( ss.str().c_str() );
             m_state.store( State::DONE );
             return;
         }
@@ -84,7 +87,9 @@ void Task::process()
         m_children.erase( it, m_children.end() );
         if( m_children.empty() )
         {
-            std::cout << m_path << " size " << m_result << std::endl << "#fs > ";
+            std::stringstream ss;
+            ss << m_path << " size " << m_result;
+            Logger::instance().log( ss.str().c_str() );
             m_state.store( State::DONE );
         }
         else
