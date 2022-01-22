@@ -22,28 +22,25 @@ class Task
     };
 
 public:
-    Task(const std::filesystem::path& path, TaskQueue& queue);
+    Task(std::filesystem::path  path, TaskQueue& queue, Task* parent = nullptr );
 
-    int id() const;
-    int result() const;
+    [[nodiscard]] unsigned long result() const;
+    [[nodiscard]] bool isDone() const;
 
-    bool isDone() const;
-
-    void process();
-    void readyChild();
-
-    void print( int deep = 0 );
+    bool process();
+    void readyChildren();
 
 private:
-    void finalize();
+    bool finish();
+    std::string formatedSize() const;
 
 private:
-    const int m_id;
     std::atomic< State > m_state;
-    size_t m_result;
+    unsigned long m_result;
     std::filesystem::path m_path;
     TaskQueue& m_queue;
 
+    Task* m_parent;
     std::vector< std::shared_ptr< Task > > m_children;
 };
 

@@ -3,7 +3,7 @@
 int main()
 {
     FileSystemCli cli;
-    cli.initThreadPool( 4 );
+    cli.initThreadPool( 1 );
     cli.start();
 
     return 0;

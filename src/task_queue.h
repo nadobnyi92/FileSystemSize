@@ -12,8 +12,8 @@
 class TaskQueue
 {
 public:
-    void addTask( std::shared_ptr<Task> task );
-    std::shared_ptr<Task> createTask( const std::filesystem::path& path );
+    void addTask( const std::shared_ptr<Task>& task );
+    std::shared_ptr<Task> createTask( const std::filesystem::path& path, Task* parent = nullptr );
     std::shared_ptr<Task> getTask();
 
 private:

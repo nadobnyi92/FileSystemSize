@@ -5,15 +5,15 @@
 #include <chrono>
 
 using namespace std::chrono_literals;
-void exec_task( TaskQueue& tasks )
+
+[[noreturn]] void exec_task( TaskQueue& tasks )
 {
-    while(1)
+    while( true )
     {
         auto task = tasks.getTask();
         if(task)
         {
-            task->process();
-            if( !task->isDone() )
+            if( !task->process() )
             {
                 tasks.addTask( task );
             }
